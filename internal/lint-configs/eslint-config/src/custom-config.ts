@@ -40,6 +40,11 @@ const customConfig: Linter.Config[] = [
     files: ['apps/**/**'],
     ignores: restrictedImportIgnores,
     rules: {
+      // 允许使用void类型
+      '@typescript-eslint/no-invalid-void-type': 'off',
+      // 关闭 不允许使用console
+      'no-console': 'off',
+      'vue/multi-word-component-names': 'off',
       'no-restricted-imports': [
         'error',
         {

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import type { Recordable } from '@vben/types';
-
 import type { VbenFormSchema } from '@vben-core/form-ui';
 
-import type { AuthenticationProps } from './types';
+import type { AuthenticationProps, LoginAndRegisterParams } from './types';
 
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -12,6 +10,7 @@ import { $t } from '@vben/locales';
 
 import { useVbenForm } from '@vben-core/form-ui';
 import { VbenButton, VbenCheckbox } from '@vben-core/shadcn-ui';
+import { cloneDeep } from '@vben-core/shared/utils';
 
 import Title from './auth-title.vue';
 import ThirdPartyLogin from './third-party-login.vue';
@@ -43,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  submit: [Recordable<any>];
+  submit: [LoginAndRegisterParams];
 }>();
 
 const [Form, formApi] = useVbenForm(
@@ -66,13 +65,15 @@ const rememberMe = ref(!!localUsername);
 
 async function handleSubmit() {
   const { valid } = await formApi.validate();
-  const values = await formApi.getValues();
   if (valid) {
+    const values = cloneDeep(await formApi.getValues());
     localStorage.setItem(
       REMEMBER_ME_KEY,
       rememberMe.value ? values?.username : '',
     );
-    emit('submit', values);
+    // 加上认证类型
+    (values as any).grantType = 'password';
+    emit('submit', values as LoginAndRegisterParams);
   }
 }
 
@@ -167,8 +168,8 @@ defineExpose({
     </div>
 
     <!-- 第三方登录 -->
-    <slot name="third-party-login">
-      <ThirdPartyLogin v-if="showThirdPartyLogin" />
+    <slot v-if="showThirdPartyLogin" name="third-party-login">
+      <ThirdPartyLogin />
     </slot>
 
     <slot name="to-register">

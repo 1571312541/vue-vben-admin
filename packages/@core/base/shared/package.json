@@ -85,6 +85,7 @@
     "clsx": "catalog:",
     "dayjs": "catalog:",
     "defu": "catalog:",
+    "file-type": "catalog:",
     "lodash.clonedeep": "catalog:",
     "lodash.get": "catalog:",
     "lodash.isequal": "catalog:",

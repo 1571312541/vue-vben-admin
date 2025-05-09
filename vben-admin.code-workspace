@@ -17,6 +17,10 @@
       "path": "apps/web-naive",
     },
     {
+      "name": "@vben/web-zc",
+      "path": "apps/web-zc",
+    },
+    {
       "name": "@vben/docs",
       "path": "docs",
     },

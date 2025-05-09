@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Recordable } from '@vben/types';
-
 import type { VbenFormSchema } from '@vben-core/form-ui';
 
 import { computed, reactive } from 'vue';
@@ -50,7 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  submit: [Recordable<any>];
+  submit: [{ code: string; phoneNumber: string; tenantId: string }];
 }>();
 
 const router = useRouter();
@@ -70,7 +68,11 @@ async function handleSubmit() {
   const { valid } = await formApi.validate();
   const values = await formApi.getValues();
   if (valid) {
-    emit('submit', values);
+    emit('submit', {
+      tenantId: values?.tenantId,
+      code: values?.code,
+      phoneNumber: values?.phoneNumber,
+    });
   }
 }
 
